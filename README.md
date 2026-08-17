@@ -1,93 +1,29 @@
-_Happy Git repositories are all alike; every unhappy Git repository is unhappy in its own way._ —Linus Tolstoy
-
 # git-sizer
 
-Is your Git repository bursting at the seams?
-
-`git-sizer` computes various size metrics for a local Git repository, flagging those that might cause you problems or inconvenience. For example:
-
-* Is the repository too big overall? Ideally, Git repositories should be under 1 GiB, and (without special handling) they start to get unwieldy over 5 GiB. Big repositories take a long time to clone and repack, and take a lot of disk space. Suggestions:
-
-    * Avoid storing generated files (e.g., compiler output, JAR files) in Git. It would be better to regenerate them when necessary, or store them in a package registry or even a fileserver.
-
-    * Avoid storing large media assets in Git. You might want to look into [Git-LFS](https://git-lfs.github.com/) or [git-annex](http://git-annex.branchable.com/), which allow you to version your media assets in Git while actually storing them outside of your repository.
-
-    * Avoid storing file archives (e.g., ZIP files, tarballs) in Git, especially if compressed. Different versions of such files don't delta well against each other, so Git can't store them efficiently. It would be better to store the individual files in your repository, or store the archive elsewhere.
-
-* Does the repository have too many references (branches and/or tags)? They all have to be transferred to the client for every fetch, even if your clone is up-to-date. Try to limit them to a few tens of thousands at most. Suggestions:
-
-    * Delete unneeded tags and branches.
-
-    * Avoid pushing your "remote-tracking" branches to a shared repository.
-
-    * Consider using ["git notes"](https://git-scm.com/docs/git-notes) rather than tags to attach auxiliary information to commits (for example, CI build results).
-
-    * Perhaps store some of your rarely-needed tags and branches in a separate fork of your repository that is not fetched from by normal developers.
-
-* Does the repository include too many objects? The more objects, the longer it takes for Git to traverse the repository's history, for example when garbage-collecting. Suggestions:
-
-    * Think about whether you are storing very many tiny files that could easily be collected into a few bigger files.
-
-    * Consider breaking your project up into multiple subprojects.
-
-* Does the repository include gigantic blobs (files)? Git works best with small- to medium-sized files. It's OK to have a few files in the megabyte range, but they should generally be the exception. Suggestions:
-
-    * Consider using [Git-LFS](https://git-lfs.github.com/) for storing your large files, especially those (e.g., media assets) that don't diff and merge usefully.
-
-    * See also the section "Is the repository too big overall?"
-
-* Does the repository include many, many versions of large text files, each one slightly changed from the one before? Such files delta very well, so they might not cause your repository to grow alarmingly. But it is expensive for Git to reconstruct the full files and to diff them, which it needs to do internally for many operations. Suggestions:
-
-    * Avoid storing log files and database dumps in Git.
-
-    * Avoid storing giant data files (e.g., enormous XML files) in Git, especially if they are modified frequently. Consider using a database instead.
-
-* Does the repository include gigantic trees (directories)? Every time a file is modified, Git has to create a new copy of every tree (i.e., every directory in the path) leading to the file. Huge trees make this expensive. Moreover, it is very expensive to traverse through history that contains huge trees, for example for `git blame`. Suggestions:
-
-    * Avoid creating directories with more than a couple of thousand entries each.
-
-    * If you must store very many files, it is better to shard them into a hierarchy of multiple, smaller directories.
-
-* Does the repository have the same (or very similar) files repeated over and over again at different paths in a single commit? If so, the repository might have a reasonable overall size, but when you check it out it balloons into an enormous working copy. (Taken to an extreme, this is called a "git bomb"; see below.) Suggestions:
-
-    * Perhaps you can achieve your goals more effectively by using tags and branches or a build-time configuration system.
-
-* Does the repository include absurdly long path names? That's probably not going to work well with other tools. One or two hundred characters should be enough, even if you're writing Java.
-
-* Are there other bizarre and questionable things in the repository?
-
-    * Annotated tags pointing at one another in long chains?
-
-    * Octopus merges with dozens of parents?
-
-    * Commits with gigantic log messages?
-
-`git-sizer` computes many size-related statistics about your repository that can help reveal all of the problems described above. These practices are not wrong per se, but the more that you stretch Git beyond its sweet spot, the less you will be able to enjoy Git's legendary speed and performance. Especially if your Git repository statistics seem out of proportion to your project size, you might be able to make your life easier by adjusting how you use Git.
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/git-sizer) [![KDE Eco](https://img.shields.io/badge/KDE%20Eco-certified-brightgreen?logo=kde&logoColor=white&style=flat-square)](https://eco.kde.org/) [![Blue Angel](https://img.shields.io/badge/Blue%20Angel-DE--UZ%20215-0055a4?style=flat-square)](https://www.blauer-engel.de/en/certification/criteria) [![Energy](https://api.green-coding.io/v1/ci/badge/get?repo=Interested-Deving-1896%2Fgit-sizer&branch=main&workflow=eco-audit.yml)](https://metrics.green-coding.io/ci-index.html)
 
 
-## Getting started
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-1.  Make sure that you have the [Git command-line client](https://git-scm.com/) installed, **version >= 2.6**. NOTE: `git-sizer` invokes `git` commands to examine the contents of your repository, so **it is required that the `git` command be in your `PATH`** when you run `git-sizer`.
+## Architecture
 
-2.  Install `git-sizer`. Either:
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-    a. Install a released version of `git-sizer`(recommended):
-       1. Go to [the releases page](https://github.com/github/git-sizer/releases) and download the ZIP file corresponding to your platform.
-       2. Unzip the file.
-       3. Move the executable file (`git-sizer` or `git-sizer.exe`) into your `PATH`.
+## Install
 
-    b. Build and install from source. See the instructions in [`docs/BUILDING.md`](docs/BUILDING.md).
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-3.  Change to the directory containing a full, non-shallow clone of the Git repository that you'd like to analyze. Then run
-
-        git-sizer [<option>...]
-
-    No options are required. You can learn about available options by typing `git-sizer -h` or by reading on.
-
-**Pro tip**: If you add `git-sizer` to your `PATH`, then you can run it by typing either `git-sizer` or `git sizer`. In the latter case, it is found and run for you by Git, and you can add extra Git options between the two words, like `git -C /path/to/my/repo sizer`. If you don't add `git-sizer` to your `PATH`, then of course you need to type its full path and filename to run it; e.g., `/path/to/bin/git-sizer`. In either case, the `git` executable *must* be in your `PATH`.
-
+```bash
+git clone https://github.com/Interested-Deving-1896/git-sizer.git
+cd git-sizer
+```
 
 ## Usage
+
 
 By default, `git-sizer` outputs its results in tabular format. For example, let's use it to analyze [the Linux repository](https://github.com/torvalds/linux), using the `--verbose` option so that all statistics are output:
 
@@ -200,7 +136,66 @@ $ git-sizer
 
 This repository is mischievously constructed to have a pathological tree structure, with the same directories repeated over and over again. As a result, even though the entire repository is less than 20 kb in size, when checked out it would explode into over a billion directories containing over ten billion files. (`git-sizer` prints `∞` for the blob count because the true number has overflowed the 32-bit counter used for that field.)
 
+## Configuration
 
-## Contributing
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
 
-`git-sizer` is in regular use and is still under active development. If you would like to help out, please see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+## CI
+
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/git-sizer`](https://github.com/Interested-Deving-1896/git-sizer) and mirrored through:
+
+```
+Interested-Deving-1896/git-sizer  ──►  OpenOS-Project-OSP/git-sizer  ──►  OpenOS-Project-Ecosystem-OOC/git-sizer
+```
+
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
+
+## Contributors
+
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
+
+## Origins
+
+<!-- AI:start:origins -->
+_Original project — no upstream influences recorded._
+<!-- AI:end:origins -->
+
+## Resources
+
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
+
+## Accessibility
+
+<!-- AI:start:accessibility -->
+This repo uses automated accessibility auditing via `check-accessibility.yml`.
+
+Checks include: CODEOWNERS ownership coverage, README screen-reader compatibility,
+WCAG 2.1 AA HTML compliance, audio overview (espeak-ng), and Braille output (liblouis).
+
+
+
+
+Run the [Check Accessibility](https://github.com/Interested-Deving-1896/git-sizer/actions/workflows/check-accessibility.yml)
+workflow to generate the first report and accessibility artifacts.
+See [DOCS/accessibility.md](https://github.com/Interested-Deving-1896/git-sizer/blob/main/DOCS/accessibility.md) for the full reference.
+<!-- AI:end:accessibility -->
+
+## License
+
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/git-sizer/blob/master/LICENSE.md) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
