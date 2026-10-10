@@ -173,6 +173,7 @@ Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-
 | [@vdye](https://github.com/vdye) | 2 |
 | [@dbast](https://github.com/dbast) | 1 |
 | [@github-security-bot](https://github.com/github-security-bot) | 1 |
+| [@Interested-Deving-1896](https://github.com/Interested-Deving-1896) | 1 |
 | [@fcharlie](https://github.com/fcharlie) | 1 |
 | [@dscho](https://github.com/dscho) | 1 |
 | [@pnsk](https://github.com/pnsk) | 1 |
